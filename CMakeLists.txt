@@ -7,8 +7,8 @@ if (POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW)
 endif ()
 
-set(LIB_MAJOR_VERSION "1")
-set(LIB_MINOR_VERSION "0")
+set(LIB_MAJOR_VERSION "0")
+set(LIB_MINOR_VERSION "1")
 set(LIB_PATCH_VERSION "0")
 set(LIB_VERSION_STRING "${LIB_MAJOR_VERSION}.${LIB_MINOR_VERSION}.${LIB_PATCH_VERSION}")
 
@@ -41,4 +41,4 @@ file(GLOB_RECURSE SRC_FILES src/apis/*.cc)
 
 add_library(${PROJECT_NAME} ${SRC_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src)
-target_link_libraries(${PROJECT_NAME} ${Protobuf_LIBRARIES} gRPC::grpc++)
+target_link_libraries(${PROJECT_NAME} protobuf::libprotobuf gRPC::grpc gRPC::grpc++)
