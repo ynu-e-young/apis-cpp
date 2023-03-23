@@ -1,0 +1,4 @@
+[submodule "apis"]
+	path = apis
+	url = https://github.com/ynu-e-young/apis.git
+	branch = main
