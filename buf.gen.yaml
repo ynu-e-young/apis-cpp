@@ -1,0 +1,9 @@
+version: v1
+managed:
+  enabled: false
+plugins:
+  - plugin: buf.build/protocolbuffers/cpp:v21.12
+    out: ./src
+
+  - plugin: buf.build/grpc/cpp
+    out: ./src

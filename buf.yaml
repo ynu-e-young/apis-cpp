@@ -1,0 +1,22 @@
+version: v1
+deps:
+  - buf.build/gogo/protobuf
+  - buf.build/googleapis/googleapis
+  - buf.build/kratos/apis
+build:
+  excludes:
+    - apis/htpp/htpp/interface
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - BASIC
+    - FILE_LOWER_SNAKE_CASE
+    - PACKAGE_VERSION_SUFFIX
+    - SERVICE_SUFFIX
+    - UNARY_RPC
+    - PACKAGE_NO_IMPORT_CYCLE
+  allow_comment_ignores: true
+  rpc_allow_google_protobuf_empty_requests: true
+  rpc_allow_google_protobuf_empty_responses: true
