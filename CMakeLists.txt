@@ -41,4 +41,4 @@ file(GLOB_RECURSE SRC_FILES src/apis/*.cc)
 
 add_library(${PROJECT_NAME} ${SRC_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src)
-target_link_libraries(${PROJECT_NAME} protobuf gRPC::grpc++)
+target_link_libraries(${PROJECT_NAME} ${Protobuf_LIBRARIES} gRPC::grpc++)
