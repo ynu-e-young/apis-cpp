@@ -1,0 +1,65 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+if (POLICY CMP0025)
+    # detect Apple's Clang
+    cmake_policy(SET CMP0025 NEW)
+endif ()
+if (POLICY CMP0054)
+    cmake_policy(SET CMP0054 NEW)
+endif ()
+
+set(LIB_MAJOR_VERSION "1")
+set(LIB_MINOR_VERSION "0")
+set(LIB_PATCH_VERSION "0")
+set(LIB_VERSION_STRING "${LIB_MAJOR_VERSION}.${LIB_MINOR_VERSION}.${LIB_PATCH_VERSION}")
+
+if (CMAKE_VERSION VERSION_LESS 3.0)
+    PROJECT(apis CXX)
+else ()
+    cmake_policy(SET CMP0048 NEW)
+    PROJECT(apis VERSION "${LIB_VERSION_STRING}" LANGUAGES C CXX)
+endif ()
+
+if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+    link_directories(/opt/homebrew/lib)
+    include_directories(/opt/homebrew/include)
+    set(OPENSSL_ROOT_DIR /opt/homebrew/opt/openssl/)
+    set(OPENSSL_INCLUDE_DIR /opt/homebrew/opt/openssl/include)
+elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
+    link_directories(/usr/local/lib)
+    include_directories(/usr/local/include)
+else ()
+    message(FATAL_ERROR "Platform ${CMAKE_SYSTEM} is not support for this project")
+endif ()
+
+# OpenSSL
+set(OPENSSL_USE_STATIC_LIBS true)
+find_package(OpenSSL REQUIRED)
+if (OPENSSL_FOUND)
+    message(STATUS "OPENSSL_VERSION = ${OPENSSL_VERSION}")
+    message(STATUS "OPENSSL_INCLUDE_DIR = ${OPENSSL_INCLUDE_DIR}")
+    message(STATUS "OPENSSL_LIBRARIES = ${OPENSSL_LIBRARIES}")
+    message("")
+endif ()
+
+# Protobuf
+find_package(Protobuf REQUIRED)
+if (Protobuf_FOUND)
+    message(STATUS "Protobuf_VERSION = ${Protobuf_VERSION}")
+    message(STATUS "Protobuf_INCLUDE_DIRS = ${Protobuf_INCLUDE_DIRS}")
+    message(STATUS "Protobuf_LIBRARY = ${Protobuf_LIBRARY}")
+    message("")
+endif ()
+
+# gRPC
+find_package(gRPC CONFIG REQUIRED)
+if (gRPC_FOUND)
+    message(STATUS "gRPC_VERSION = ${gRPC_VERSION}")
+    message("")
+endif ()
+
+file(GLOB_RECURSE HEADER_FILES src/apis/*.h)
+file(GLOB_RECURSE SRC_FILES src/apis/*.cc)
+
+add_library(${PROJECT_NAME} ${SRC_FILES})
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src)
+target_link_libraries(${PROJECT_NAME} protobuf gRPC::grpc++)
